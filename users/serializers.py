@@ -7,9 +7,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('url', 'username', 'email', 'groups', 'password')
-        extra_kwargs = {
-            'password': {'write_only': True, },
-        }
 
     def validate_password(self, value: str) -> str:
         return make_password(value)
