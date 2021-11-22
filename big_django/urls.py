@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from users import views
+from _notes.views import *
+from _users.views import *
 
 router = routers.DefaultRouter()
-router.register('users', views.UserViewSet)
-router.register('groups', views.GroupViewSet)
+router.register('_users', UserViewSet)
+router.register('_groups', GroupViewSet)
+router.register('_notes', NotesViewSet)
 
 urlpatterns = [
     url('^', include(router.urls)),
