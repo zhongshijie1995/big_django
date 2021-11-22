@@ -2,18 +2,23 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from users.custom import UserPermission
-from users.serializers import UserSerializer, GroupSerializer
+from _users.custom import UserPermission
+from _users.serializers import UserSerializer, GroupSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     允许用户查看或编辑的API路径。
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all().order_by('pk')
     serializer_class = UserSerializer
 
     permission_classes = (UserPermission,)
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return User.objects.all().order_by('pk')
+        return User.objects.filter(username=self.request.user.username).order_by('pk')
 
 
 class GroupViewSet(viewsets.ModelViewSet):
